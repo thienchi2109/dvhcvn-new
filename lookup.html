@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏛️ Tra cứu Đơn vị Hành chính Việt Nam</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffd9e8 0%, #ffe4f0 50%, #fff0f8 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ffd9e8, #ffb3d1);
+            padding: 30px;
+            text-align: center;
+            color: #333;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
+            padding: 30px;
+        }
+
+        .lookup-section {
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ffd9e8;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #ff99cc;
+            box-shadow: 0 0 0 3px rgba(255, 153, 204, 0.1);
+        }
+
+        .form-control:disabled {
+            background: #f8f9fa;
+            color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        /* Combobox styles */
+        .combobox-container {
+            position: relative;
+        }
+
+        .combobox-input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 2px solid #ffd9e8;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+
+        .combobox-input:focus {
+            outline: none;
+            border-color: #ff99cc;
+            box-shadow: 0 0 0 3px rgba(255, 153, 204, 0.1);
+        }
+
+        .combobox-arrow {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: #999;
+            font-size: 0.8rem;
+        }
+
+        .combobox-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border: 2px solid #ffd9e8;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .combobox-dropdown.show {
+            display: block;
+        }
+
+        .combobox-option {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .combobox-option:hover,
+        .combobox-option.highlighted {
+            background-color: #ffd9e8;
+        }
+
+        .combobox-option:last-child {
+            border-bottom: none;
+        }
+
+        .combobox-no-results {
+            padding: 15px;
+            text-align: center;
+            color: #999;
+            font-style: italic;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            padding-right: 50px;
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #ffd9e8;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: #ffb3d1;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #ffd9e8, #ffb3d1);
+            color: #333;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 179, 209, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            color: #6c757d;
+            border: 2px solid #dee2e6;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #e9ecef, #dee2e6);
+            color: #495057;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-group .btn {
+            flex: 1;
+        }
+
+        .stats-section {
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #ffd9e8, #ffe4f0);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .results-section {
+            grid-column: 1 / -1;
+            margin-top: 20px;
+        }
+
+        .result-card {
+            background: #fff;
+            border: 2px solid #ffd9e8;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .result-card:hover {
+            border-color: #ffb3d1;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 179, 209, 0.2);
+        }
+
+        .result-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .result-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #666;
+            min-width: 80px;
+        }
+
+        .info-value {
+            color: #333;
+            background: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: monospace;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .error {
+            background: #ffe6e6;
+            color: #d63384;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #d63384;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .result-info {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Footer styles */
+        .footer {
+            background: linear-gradient(135deg, #ffd9e8, #ffb3d1);
+            color: #333;
+            text-align: center;
+            padding: 25px 20px;
+            margin-top: 40px;
+            border-radius: 15px 15px 0 0;
+            font-size: 0.95rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer p {
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .footer .heart {
+            color: #ff6b9d;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏛️ Tra cứu Đơn vị Hành chính Việt Nam</h1>
+            <p>Danh mục dự kiến DVHC theo Công văn số 2896/BNV-CQĐP của Bộ Nội vụ</p>
+        </div>
+
+        <div class="main-content">
+            <div class="lookup-section">
+                <h2 class="section-title">
+                    📍 Chọn Địa điểm
+                </h2>
+                
+                <div class="form-group">
+                    <label for="provinceCombo">🏙️ Tỉnh/Thành phố</label>
+                    <div class="combobox-container">
+                        <input type="text" id="provinceCombo" class="combobox-input"
+                               placeholder="Nhập hoặc chọn tỉnh/thành phố..." autocomplete="off">
+                        <span class="combobox-arrow">▼</span>
+                        <div id="provinceDropdown" class="combobox-dropdown"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="wardCombo">🏘️ Phường/Xã</label>
+                    <div class="combobox-container">
+                        <input type="text" id="wardCombo" class="combobox-input"
+                               placeholder="Chọn tỉnh/thành phố trước..." disabled autocomplete="off">
+                        <span class="combobox-arrow">▼</span>
+                        <div id="wardDropdown" class="combobox-dropdown"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="searchInput">🔍 Tìm kiếm địa điểm</label>
+                    <div class="search-box">
+                        <input type="text" id="searchInput" class="form-control search-input" 
+                               placeholder="Nhập tên tỉnh/thành phố hoặc phường/xã...">
+                        <button class="search-btn" onclick="performSearch()">🔍</button>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn" onclick="lookupSelected()">
+                        🔍 Tra cứu
+                    </button>
+                    <button class="btn btn-secondary" onclick="resetFilters()">
+                        🗑️ Xóa bộ lọc
+                    </button>
+                </div>
+            </div>
+
+            <div class="stats-section">
+                <h2 class="section-title">📊 Thống kê</h2>
+                
+                <div class="stat-card">
+                    <span class="stat-number" id="provinceCount">--</span>
+                    <div class="stat-label">Tỉnh/Thành phố</div>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-number" id="wardCount">--</span>
+                    <div class="stat-label">Phường/Xã</div>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-number" id="selectedWardCount">0</span>
+                    <div class="stat-label">Phường/Xã hiện tại</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-section">
+            <div id="results">
+                <div class="empty-state">
+                    <div class="empty-state-icon">🏛️</div>
+                    <h3>Chọn địa điểm để xem thông tin chi tiết</h3>
+                    <p>Sử dụng dropdown hoặc tìm kiếm để tra cứu thông tin đơn vị hành chính</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Phát triển bởi <strong>Nguyễn Thiện Chí</strong> <span class="heart">♥</span></p>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE = '/api';
+        let allProvinces = [];
+        let allWards = [];
+        let currentProvinceWards = [];
+        let selectedProvince = null;
+        let selectedWard = null;
+
+        // Load initial data
+        async function loadInitialData() {
+            try {
+                // Load provinces
+                const provincesResponse = await fetch(`${API_BASE}/provinces`);
+                allProvinces = await provincesResponse.json();
+
+                // Load all wards for search
+                const wardsResponse = await fetch(`${API_BASE}/wards`);
+                allWards = await wardsResponse.json();
+
+                initializeComboboxes();
+                updateStats();
+
+            } catch (error) {
+                console.error('Error loading initial data:', error);
+                showError('Không thể tải dữ liệu ban đầu');
+            }
+        }
+        
+        // Combobox functionality
+        function initializeComboboxes() {
+            setupCombobox('provinceCombo', 'provinceDropdown', allProvinces, 'name', 'province_code', onProvinceSelect);
+            setupCombobox('wardCombo', 'wardDropdown', [], 'name', 'ward_code', onWardSelect);
+        }
+
+        function setupCombobox(inputId, dropdownId, data, displayField, valueField, onSelect) {
+            const input = document.getElementById(inputId);
+            const dropdown = document.getElementById(dropdownId);
+            let highlightedIndex = -1;
+
+            input.addEventListener('input', function() {
+                const query = this.value.toLowerCase();
+                const filteredData = data.filter(item =>
+                    item[displayField].toLowerCase().includes(query)
+                );
+
+                showDropdown(dropdown, filteredData, displayField, valueField, onSelect);
+                highlightedIndex = -1;
+            });
+
+            input.addEventListener('focus', function() {
+                if (data.length > 0) {
+                    showDropdown(dropdown, data, displayField, valueField, onSelect);
+                }
+            });
+
+            input.addEventListener('keydown', function(e) {
+                const options = dropdown.querySelectorAll('.combobox-option');
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    highlightedIndex = Math.min(highlightedIndex + 1, options.length - 1);
+                    updateHighlight(options, highlightedIndex);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    highlightedIndex = Math.max(highlightedIndex - 1, -1);
+                    updateHighlight(options, highlightedIndex);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (highlightedIndex >= 0 && options[highlightedIndex]) {
+                        options[highlightedIndex].click();
+                    }
+                } else if (e.key === 'Escape') {
+                    dropdown.classList.remove('show');
+                    highlightedIndex = -1;
+                }
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.classList.remove('show');
+                    highlightedIndex = -1;
+                }
+            });
+        }
+
+        function showDropdown(dropdown, data, displayField, valueField, onSelect) {
+            dropdown.innerHTML = '';
+
+            if (data.length === 0) {
+                dropdown.innerHTML = '<div class="combobox-no-results">Không tìm thấy kết quả</div>';
+            } else {
+                data.forEach(item => {
+                    const option = document.createElement('div');
+                    option.className = 'combobox-option';
+                    option.textContent = item[displayField];
+                    option.dataset.value = item[valueField];
+
+                    option.addEventListener('click', function() {
+                        onSelect(item);
+                        dropdown.classList.remove('show');
+                    });
+
+                    dropdown.appendChild(option);
+                });
+            }
+
+            dropdown.classList.add('show');
+        }
+
+        function updateHighlight(options, index) {
+            options.forEach((option, i) => {
+                option.classList.toggle('highlighted', i === index);
+            });
+
+            if (index >= 0 && options[index]) {
+                options[index].scrollIntoView({ block: 'nearest' });
+            }
+        }
+        
+        function onProvinceSelect(province) {
+            selectedProvince = province;
+            document.getElementById('provinceCombo').value = province.name;
+            document.getElementById('provinceDropdown').classList.remove('show');
+
+            // Reset ward selection
+            selectedWard = null;
+            const wardInput = document.getElementById('wardCombo');
+            wardInput.value = '';
+            wardInput.disabled = false;
+            wardInput.placeholder = 'Nhập hoặc chọn phường/xã...';
+
+            loadWardsForProvince(province.province_code);
+        }
+
+        function onWardSelect(ward) {
+            selectedWard = ward;
+            document.getElementById('wardCombo').value = ward.name;
+            document.getElementById('wardDropdown').classList.remove('show');
+        }
+
+        async function loadWardsForProvince(provinceCode) {
+            try {
+                const response = await fetch(`${API_BASE}/provinces/${provinceCode}/wards`);
+                currentProvinceWards = await response.json();
+
+                // Update ward combobox data
+                const wardInput = document.getElementById('wardCombo');
+                const wardDropdown = document.getElementById('wardDropdown');
+
+                // Re-setup ward combobox with new data
+                setupCombobox('wardCombo', 'wardDropdown', currentProvinceWards, 'name', 'ward_code', onWardSelect);
+
+                document.getElementById('selectedWardCount').textContent = currentProvinceWards.length;
+
+            } catch (error) {
+                console.error('Error loading wards:', error);
+                showError('Không thể tải danh sách phường/xã');
+            }
+        }
+        
+        function updateStats() {
+            document.getElementById('provinceCount').textContent = allProvinces.length;
+            document.getElementById('wardCount').textContent = allWards.length;
+        }
+
+        function formatNumber(num) {
+            if (num === null || num === undefined) return 'N/A';
+            return new Intl.NumberFormat('vi-VN').format(num);
+        }
+        
+        async function lookupSelected() {
+            if (!selectedProvince) {
+                showError('Vui lòng chọn tỉnh/thành phố');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                if (selectedWard) {
+                    // Show specific ward info
+                    showWardResult(selectedProvince, selectedWard);
+                } else {
+                    // Show province info
+                    const response = await fetch(`${API_BASE}/provinces/${selectedProvince.province_code}`);
+                    const province = await response.json();
+                    showProvinceResult(province);
+                }
+
+            } catch (error) {
+                console.error('Error during lookup:', error);
+                showError('Không thể thực hiện tra cứu');
+            }
+        }
+
+        function resetFilters() {
+            // Reset province selection
+            selectedProvince = null;
+            selectedWard = null;
+            currentProvinceWards = [];
+
+            // Reset province combobox
+            const provinceInput = document.getElementById('provinceCombo');
+            provinceInput.value = '';
+            document.getElementById('provinceDropdown').classList.remove('show');
+
+            // Reset ward combobox
+            const wardInput = document.getElementById('wardCombo');
+            wardInput.value = '';
+            wardInput.disabled = true;
+            wardInput.placeholder = 'Chọn tỉnh/thành phố trước...';
+            document.getElementById('wardDropdown').classList.remove('show');
+
+            // Reset search input
+            document.getElementById('searchInput').value = '';
+
+            // Reset stats
+            document.getElementById('selectedWardCount').textContent = '0';
+
+            // Reset results
+            document.getElementById('results').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">🏛️</div>
+                    <h3>Chọn địa điểm để xem thông tin chi tiết</h3>
+                    <p>Sử dụng dropdown hoặc tìm kiếm để tra cứu thông tin đơn vị hành chính</p>
+                </div>
+            `;
+
+            // Re-setup comboboxes
+            setupCombobox('wardCombo', 'wardDropdown', [], 'name', 'ward_code', onWardSelect);
+        }
+        
+        async function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) {
+                showError('Vui lòng nhập từ khóa tìm kiếm');
+                return;
+            }
+            
+            showLoading();
+            
+            try {
+                // Search provinces
+                const provincesResponse = await fetch(`${API_BASE}/search?q=${encodeURIComponent(query)}`);
+                const provinces = await provincesResponse.json();
+                
+                // Search wards
+                const matchingWards = allWards.filter(ward => 
+                    ward.name.toLowerCase().includes(query.toLowerCase())
+                );
+                
+                showSearchResults(provinces, matchingWards, query);
+                
+            } catch (error) {
+                console.error('Error during search:', error);
+                showError('Không thể thực hiện tìm kiếm');
+            }
+        }
+        
+        function showProvinceResult(province) {
+            const areaText = province.area_km2 ? `${formatNumber(province.area_km2)} km²` : 'N/A';
+            const populationText = province.population ? formatNumber(province.population) : 'N/A';
+
+            const html = `
+                <div class="result-card fade-in">
+                    <div class="result-title">${province.name}</div>
+                    <div class="result-info">
+                        <div class="info-item">
+                            <span class="info-label">Mã tỉnh:</span>
+                            <span class="info-value">${province.province_code}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Tên ngắn:</span>
+                            <span class="info-value">${province.short_name}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Loại:</span>
+                            <span class="info-value">${province.place_type}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Diện tích:</span>
+                            <span class="info-value">${areaText}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Dân số:</span>
+                            <span class="info-value">${populationText}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Số phường/xã:</span>
+                            <span class="info-value">${province.wards ? province.wards.length : 0}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('results').innerHTML = html;
+        }
+        
+        function showWardResult(province, ward) {
+            const areaText = ward.area_km2 ? `${formatNumber(ward.area_km2)} km²` : 'N/A';
+            const populationText = ward.population ? formatNumber(ward.population) : 'N/A';
+
+            const html = `
+                <div class="result-card fade-in">
+                    <div class="result-title">${ward.name}</div>
+                    <div class="result-info">
+                        <div class="info-item">
+                            <span class="info-label">Mã phường/xã:</span>
+                            <span class="info-value">${ward.ward_code}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Thuộc tỉnh:</span>
+                            <span class="info-value">${province.name}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Mã tỉnh:</span>
+                            <span class="info-value">${ward.province_code}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Diện tích:</span>
+                            <span class="info-value">${areaText}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Dân số:</span>
+                            <span class="info-value">${populationText}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('results').innerHTML = html;
+        }
+        
+        function showSearchResults(provinces, wards, query) {
+            if (provinces.length === 0 && wards.length === 0) {
+                document.getElementById('results').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔍</div>
+                        <h3>Không tìm thấy kết quả</h3>
+                        <p>Không có địa điểm nào khớp với từ khóa "${query}"</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            
+            if (provinces.length > 0) {
+                html += '<h3 style="margin: 20px 0; color: #333;">🏙️ Tỉnh/Thành phố</h3>';
+                provinces.forEach(province => {
+                    const areaText = province.area_km2 ? `${formatNumber(province.area_km2)} km²` : 'N/A';
+                    const populationText = province.population ? formatNumber(province.population) : 'N/A';
+
+                    html += `
+                        <div class="result-card fade-in">
+                            <div class="result-title">${province.name}</div>
+                            <div class="result-info">
+                                <div class="info-item">
+                                    <span class="info-label">Mã tỉnh:</span>
+                                    <span class="info-value">${province.province_code}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Loại:</span>
+                                    <span class="info-value">${province.place_type}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Diện tích:</span>
+                                    <span class="info-value">${areaText}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Dân số:</span>
+                                    <span class="info-value">${populationText}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Số phường/xã:</span>
+                                    <span class="info-value">${province.wards ? province.wards.length : 0}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            if (wards.length > 0) {
+                html += '<h3 style="margin: 20px 0; color: #333;">🏘️ Phường/Xã</h3>';
+                wards.slice(0, 20).forEach(ward => { // Limit to 20 results
+                    const province = allProvinces.find(p => p.province_code === ward.province_code);
+                    const areaText = ward.area_km2 ? `${formatNumber(ward.area_km2)} km²` : 'N/A';
+                    const populationText = ward.population ? formatNumber(ward.population) : 'N/A';
+
+                    html += `
+                        <div class="result-card fade-in">
+                            <div class="result-title">${ward.name}</div>
+                            <div class="result-info">
+                                <div class="info-item">
+                                    <span class="info-label">Mã phường/xã:</span>
+                                    <span class="info-value">${ward.ward_code}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Thuộc tỉnh:</span>
+                                    <span class="info-value">${province ? province.name : 'N/A'}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Diện tích:</span>
+                                    <span class="info-value">${areaText}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Dân số:</span>
+                                    <span class="info-value">${populationText}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                if (wards.length > 20) {
+                    html += `<p style="text-align: center; color: #666; margin: 20px 0;">Và ${wards.length - 20} kết quả khác...</p>`;
+                }
+            }
+            
+            document.getElementById('results').innerHTML = html;
+        }
+        
+        function showLoading() {
+            document.getElementById('results').innerHTML = '<div class="loading">🔄 Đang tải dữ liệu...</div>';
+        }
+        
+        function showError(message) {
+            document.getElementById('results').innerHTML = `<div class="error">❌ ${message}</div>`;
+        }
+        
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        // Load data on page load
+        loadInitialData();
+    </script>
+</body>
+</html>

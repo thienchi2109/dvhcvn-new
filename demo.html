@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo DVHC Vietnam Data</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .search-box {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .results {
+            margin-top: 20px;
+        }
+        .province-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f9f9f9;
+        }
+        .province-name {
+            font-weight: bold;
+            color: #007bff;
+            font-size: 18px;
+        }
+        .province-info {
+            color: #666;
+            margin-top: 5px;
+        }
+        .ward-count {
+            background: #28a745;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+        .loading {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+        .error {
+            color: #dc3545;
+            background: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .stats {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🇻🇳 Demo Dữ liệu Đơn vị Hành chính Việt Nam</h1>
+        
+        <div class="stats" id="stats">
+            <div class="loading">Đang tải thống kê...</div>
+        </div>
+        
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Tìm kiếm tỉnh/thành phố..." />
+        </div>
+        
+        <div class="controls">
+            <button onclick="loadAllProvinces()">Tất cả tỉnh/thành phố</button>
+            <button onclick="loadHanoi()">Thông tin Hà Nội</button>
+            <button onclick="loadHanoiWards()">Phường/xã Hà Nội</button>
+            <button onclick="searchProvinces()">Tìm kiếm</button>
+        </div>
+        
+        <div class="results" id="results">
+            <div class="loading">Nhấn một nút để tải dữ liệu...</div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api';
+        
+        async function fetchData(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Fetch error:', error);
+                throw error;
+            }
+        }
+        
+        function showLoading() {
+            document.getElementById('results').innerHTML = '<div class="loading">Đang tải dữ liệu...</div>';
+        }
+        
+        function showError(message) {
+            document.getElementById('results').innerHTML = `<div class="error">Lỗi: ${message}</div>`;
+        }
+        
+        async function loadStats() {
+            try {
+                const provinces = await fetchData(`${API_BASE}/provinces`);
+                const wards = await fetchData(`${API_BASE}/wards`);
+                
+                document.getElementById('stats').innerHTML = `
+                    <strong>Thống kê:</strong> 
+                    ${provinces.length} tỉnh/thành phố | 
+                    ${wards.length} phường/xã/thị trấn
+                `;
+            } catch (error) {
+                document.getElementById('stats').innerHTML = '<div class="error">Không thể tải thống kê</div>';
+            }
+        }
+        
+        async function loadAllProvinces() {
+            showLoading();
+            try {
+                const data = await fetchData(`${API_BASE}/provinces`);
+                displayProvinces(data);
+            } catch (error) {
+                showError('Không thể tải danh sách tỉnh/thành phố');
+            }
+        }
+        
+        async function loadHanoi() {
+            showLoading();
+            try {
+                const data = await fetchData(`${API_BASE}/provinces/01`);
+                displayProvinces([data]);
+            } catch (error) {
+                showError('Không thể tải thông tin Hà Nội');
+            }
+        }
+        
+        async function loadHanoiWards() {
+            showLoading();
+            try {
+                const data = await fetchData(`${API_BASE}/provinces/01/wards`);
+                displayWards(data);
+            } catch (error) {
+                showError('Không thể tải danh sách phường/xã Hà Nội');
+            }
+        }
+        
+        async function searchProvinces() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) {
+                alert('Vui lòng nhập từ khóa tìm kiếm');
+                return;
+            }
+            
+            showLoading();
+            try {
+                const data = await fetchData(`${API_BASE}/search?q=${encodeURIComponent(query)}`);
+                displayProvinces(data);
+            } catch (error) {
+                showError('Không thể thực hiện tìm kiếm');
+            }
+        }
+        
+        function displayProvinces(provinces) {
+            if (provinces.length === 0) {
+                document.getElementById('results').innerHTML = '<div class="loading">Không tìm thấy kết quả nào.</div>';
+                return;
+            }
+
+            const html = provinces.map(province => {
+                const areaText = province.area_km2 ? `${formatNumber(province.area_km2)} km²` : 'N/A';
+                const populationText = province.population ? formatNumber(province.population) : 'N/A';
+
+                return `
+                    <div class="province-card">
+                        <div class="province-name">${province.name}</div>
+                        <div class="province-info">
+                            Mã: ${province.province_code} |
+                            Tên ngắn: ${province.short_name} |
+                            Loại: ${province.place_type}<br>
+                            Diện tích: ${areaText} |
+                            Dân số: ${populationText}
+                            ${province.ward_count !== undefined ? `<span class="ward-count">${province.ward_count} phường/xã</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('results').innerHTML = html;
+        }
+
+        function formatNumber(num) {
+            if (num === null || num === undefined) return 'N/A';
+            return new Intl.NumberFormat('vi-VN').format(num);
+        }
+        
+        function displayWards(wards) {
+            if (wards.length === 0) {
+                document.getElementById('results').innerHTML = '<div class="loading">Không tìm thấy phường/xã nào.</div>';
+                return;
+            }
+
+            const html = wards.map(ward => {
+                const areaText = ward.area_km2 ? `${formatNumber(ward.area_km2)} km²` : 'N/A';
+                const populationText = ward.population ? formatNumber(ward.population) : 'N/A';
+
+                return `
+                    <div class="province-card">
+                        <div class="province-name">${ward.name}</div>
+                        <div class="province-info">
+                            Mã phường/xã: ${ward.ward_code} |
+                            Mã tỉnh: ${ward.province_code}<br>
+                            Diện tích: ${areaText} |
+                            Dân số: ${populationText}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('results').innerHTML = html;
+        }
+        
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchProvinces();
+            }
+        });
+        
+        // Load stats on page load
+        loadStats();
+    </script>
+</body>
+</html>
