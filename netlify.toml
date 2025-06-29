@@ -1,0 +1,21 @@
+[build]
+  # No build command needed for static site
+  publish = "."
+  
+[build.environment]
+  # No environment variables needed
+
+[[headers]]
+  # Apply these headers to all routes
+  for = "/*"
+  [headers.values]
+    # Enable CORS for JSON files
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type"
+
+[[headers]]
+  # Cache JSON files for better performance
+  for = "/json/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"

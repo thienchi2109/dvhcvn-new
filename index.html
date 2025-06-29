@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏛️ Tra cứu Đơn vị Hành chính Việt Nam</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffd9e8 0%, #ffe4f0 50%, #fff0f8 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ffd9e8, #ffb3d1);
+            padding: 30px;
+            text-align: center;
+            color: #333;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            display: inline-block;
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-links a:hover {
+            background: #fff;
+            border-color: #ff99cc;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 153, 204, 0.3);
+        }
+
+        .main-content {
+            padding: 40px;
+            text-align: center;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .feature-desc {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .stats {
+            background: linear-gradient(135deg, #ffd9e8, #ffe4f0);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 40px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            display: block;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+            font-size: 0.9rem;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #ffd9e8, #ffb3d1);
+            color: #333;
+            text-align: center;
+            padding: 25px 20px;
+            margin-top: 40px;
+            font-size: 0.95rem;
+        }
+
+        .footer p {
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .footer .heart {
+            color: #ff6b9d;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏛️ Tra cứu Đơn vị Hành chính Việt Nam</h1>
+            <p>Danh mục dự kiến DVHC theo Công văn số 2896/BNV-CQĐP của Bộ Nội vụ</p>
+            
+            <div class="nav-links">
+                <a href="lookup-static.html">🔍 Tra cứu DVHC</a>
+                <a href="demo-static.html">📊 Demo & Thống kê</a>
+                <a href="json/vietnam_admin_units.json" target="_blank">📄 Dữ liệu JSON</a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="stats" id="stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="provinceCount">--</span>
+                    <div class="stat-label">Tỉnh/Thành phố</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="wardCount">--</span>
+                    <div class="stat-label">Phường/Xã</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalArea">--</span>
+                    <div class="stat-label">Tổng diện tích (km²)</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalPopulation">--</span>
+                    <div class="stat-label">Tổng dân số</div>
+                </div>
+            </div>
+
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <div class="feature-title">Tra cứu Thông minh</div>
+                    <div class="feature-desc">
+                        Tìm kiếm nhanh chóng với combobox hỗ trợ autocomplete. 
+                        Gõ để tìm kiếm tỉnh/thành phố và phường/xã một cách dễ dàng.
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-title">Thông tin Chi tiết</div>
+                    <div class="feature-desc">
+                        Hiển thị đầy đủ thông tin diện tích, dân số, mã đơn vị hành chính 
+                        với format số đẹp mắt theo chuẩn Việt Nam.
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <div class="feature-title">Responsive Design</div>
+                    <div class="feature-desc">
+                        Giao diện thân thiện trên mọi thiết bị với thiết kế hiện đại, 
+                        màu sắc hồng pastel dễ chịu cho mắt.
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-title">Hiệu suất Cao</div>
+                    <div class="feature-desc">
+                        Tải dữ liệu nhanh chóng, tìm kiếm real-time không cần reload trang. 
+                        Hỗ trợ keyboard navigation đầy đủ.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Phát triển bởi <strong>Nguyễn Thiện Chí</strong> <span class="heart">♥</span></p>
+        </div>
+    </footer>
+
+    <script>
+        // Load and display statistics
+        async function loadStats() {
+            try {
+                const response = await fetch('./json/vietnam_admin_units.json');
+                const data = await response.json();
+                
+                let totalWards = 0;
+                let totalArea = 0;
+                let totalPopulation = 0;
+                
+                data.forEach(province => {
+                    if (province.wards) {
+                        totalWards += province.wards.length;
+                    }
+                    if (province.area_km2) {
+                        totalArea += province.area_km2;
+                    }
+                    if (province.population) {
+                        totalPopulation += province.population;
+                    }
+                });
+                
+                document.getElementById('provinceCount').textContent = data.length;
+                document.getElementById('wardCount').textContent = formatNumber(totalWards);
+                document.getElementById('totalArea').textContent = formatNumber(Math.round(totalArea));
+                document.getElementById('totalPopulation').textContent = formatNumber(totalPopulation);
+                
+            } catch (error) {
+                console.error('Error loading stats:', error);
+                document.getElementById('provinceCount').textContent = '63';
+                document.getElementById('wardCount').textContent = '10,000+';
+                document.getElementById('totalArea').textContent = '331,000+';
+                document.getElementById('totalPopulation').textContent = '97M+';
+            }
+        }
+        
+        function formatNumber(num) {
+            if (num === null || num === undefined) return 'N/A';
+            return new Intl.NumberFormat('vi-VN').format(num);
+        }
+        
+        // Load stats on page load
+        loadStats();
+    </script>
+</body>
+</html>
